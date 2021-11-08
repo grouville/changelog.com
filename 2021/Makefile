@@ -17,6 +17,7 @@ BOLD := \033[1m
 NORMAL := \033[0m
 RESET := \033[0m
 
+BASE_DIR := $(CURDIR)/..
 MANIFESTS := $(CURDIR)/manifests
 
 DNS_TTL ?= 600
