@@ -51,7 +51,7 @@ dagger-ci: $(DAGGER_ENV)/ci
 	@printf "💡 $(GREEN)Introduce $(BOLD).daggerignore$(RESET)$(GREEN) and/or respect $(BOLD).dockerignore$(RESET)\n\n"
 	@printf "⭐️ $(GREEN)Multiple $(BOLD)--exclude$(RESETT)$(GREEN) statements worked well - it's something that I intend to document$(RESET)\n"
 	@printf "🙌 $(GREEN)My uncached ci source now takes $(BOLD)6s$(RESET)$(GREEN) for $(BOLD)80MB$(RESET)$(GREEN) & $(BOLD)0.5s$(RESET)$(GREEN) cached$(RESET)\n\n"
-	$(DAGGER_CTX) up
+	$(DAGGER_CTX) up --log-level debug
 
 .PHONY: dagger-clean
 dagger-clean:
