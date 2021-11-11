@@ -18,6 +18,10 @@ test: os.#Container & {
 		from: "thechangelog/runtime:2021-05-29T10.17.12Z"
 	}
 	mount: "/app": from: source
+	cache: {
+		"/app/_build": true
+		"/app/deps":   true
+	}
 	command: """
 		  mix do deps.get, deps.compile, test
 		"""
