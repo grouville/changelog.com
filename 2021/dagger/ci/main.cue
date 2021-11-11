@@ -1,5 +1,4 @@
 // Starting point: https://docs.dagger.io/1012/ci
-// 💡 Formatting differs because https://github.com/jjo/vim-cue auto formats - go fmt FTW!
 package main
 
 import (
@@ -10,36 +9,58 @@ import (
 
 source: dagger.#Artifact
 
-// 🤔 How do we split this in multiple steps, with caching for deps & compilation?
-// 🤔 How do we spin another container for PostgreSQL, and tear it down when done?
 // Starting point: .circleci/config.yml
-test: os.#Container & {
+deps_get: os.#Container & {
 	image: docker.#Pull & {
 		from: "thechangelog/runtime:2021-05-29T10.17.12Z"
 	}
-	mount: "/app": from: source
+	mount: {
+		"/app": from: source
+	}
 	cache: {
-		"/app/_build": true
-		"/app/deps":   true
+		"/app/deps": true
 	}
 	command: """
-		  mix do deps.get, deps.compile, test
+		  mix deps.get
 		"""
 	env:
 		MIX_ENV: "test"
 	dir: "/app"
 }
 
-prod: os.#Container & {
+// How do I run this AFTER deps_get?
+// I will need to share the /apps/deps volume from deps_get
+deps_compile: os.#Container & {
 	image: docker.#Pull & {
 		from: "thechangelog/runtime:2021-05-29T10.17.12Z"
 	}
-	mount: "/app": from: source
+	mount: {
+		"/app": from: source
+	}
+	cache: {
+		"/app/deps":   true
+		"/app/_build": true
+	}
 	command: """
-		  mix do deps.get, deps.compile
-		  cd assets && yarn install --frozen-lockfile
+		  mix deps.compile
 		"""
 	env:
-		MIX_ENV: "prod"
+		MIX_ENV: "test"
 	dir: "/app"
 }
+
+// 🤔 How do we spin another container for PostgreSQL, and tear it down when done?
+
+// prod: os.#Container & {
+//  image: docker.#Pull & {
+//   from: "thechangelog/runtime:2021-05-29T10.17.12Z"
+//  }
+//  mount: "/app": from: source
+//  command: """
+//     mix do deps.get, deps.compile
+//     cd assets && yarn install --frozen-lockfile
+//   """
+//  env:
+//   MIX_ENV: "prod"
+//  dir: "/app"
+// }
