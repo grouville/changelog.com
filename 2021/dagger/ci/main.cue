@@ -45,7 +45,7 @@ deps_compile: os.#Container & {
 		  mix deps.compile
 		"""
 	env:
-		MIX_ENV: "test"
+		MIX_ENV: deps_get.env.MIX_ENV
 	dir: "/app"
 }
 
