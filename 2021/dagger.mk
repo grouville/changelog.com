@@ -45,7 +45,7 @@ awk '{ print "--exclude " $$1 }' < $(BASE_DIR)/.dockerignore
 endef
 .PHONY: dagger-ci
 dagger-ci: $(DAGGER_ENV)/ci
-	$(DAGGER_CTX) input dir source . $(shell $(_convert_dockerignore_to_excludes))
+	$(DAGGER_CTX) input dir source . $(shell $(_convert_dockerignore_to_excludes)) --exclude deps
 	@printf "\n🤔 $(YELLOW)In repos like this one, uploading source to a remote $(BOLD)BUILDKIT_HOST$(RESET)$(YELLOW) is slow: $(BOLD)392s$(RESET)$(YELLOW) for $(BOLD)3.4GB$(RESET)\n"
 	@printf "$(YELLOW)   Even cached, the source operation is still slow: $(BOLD)27s$(RESET)\n"
 	@printf "💡 $(GREEN)Introduce $(BOLD).daggerignore$(RESET)$(GREEN) and/or respect $(BOLD).dockerignore$(RESET)\n\n"
