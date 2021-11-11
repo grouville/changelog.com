@@ -3,7 +3,7 @@ DAGGER_URL := $(DAGGER_RELEASES)/download/v$(DAGGER_VERSION)/dagger-$(platform)-
 DAGGER := $(LOCAL_BIN)/$(DAGGER_BIN)
 
 DAGGER_RELEASES := https://github.com/dagger/dagger/releases
-DAGGER_VERSION := 0.1.0-alpha.27
+DAGGER_VERSION := 0.1.0-alpha.30
 DAGGER_DIR := $(LOCAL_BIN)/dagger_v$(DAGGER_VERSION)_$(platform)_amd64
 DAGGER_URL := $(DAGGER_RELEASES)/download/v$(DAGGER_VERSION)/$(notdir $(DAGGER_DIR)).tar.gz
 DAGGER := $(DAGGER_DIR)/dagger
@@ -27,12 +27,12 @@ DAGGER_CTX := cd $(BASE_DIR) && $(DAGGER) --log-format plain
 DAGGER_HOME := $(BASE_DIR)/.dagger
 DAGGER_ENV := $(DAGGER_HOME)/env
 
-$(DAGGER_HOME): $(DAGGER)
+$(DAGGER_HOME): | $(DAGGER)
 	@printf "\n🤔 $(YELLOW)Does the existence of the $(RESET)$(BOLD).dagger$(RESET)$(YELLOW) dir imply $(GREEN)$(BOLD)dagger init$(RESET)?\n"
 	@printf "💡 $(GREEN)Make this command idempotent$(RESET)\n\n"
 	$(DAGGER_CTX) init
 .PHONY: dagger-init
-dagger-init: $(DAGGER_HOME)
+dagger-init: | $(DAGGER_HOME)
 
 # 💡 This would have been nicer:
 # dagger env ci || dagger env ci ...
