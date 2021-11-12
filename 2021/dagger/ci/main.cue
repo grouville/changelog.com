@@ -7,7 +7,10 @@ import (
 	"alpha.dagger.io/docker"
 )
 
+// dagger input dir source .
 source: dagger.#Artifact
+
+// [ for env in 
 
 // Starting point: .circleci/config.yml
 deps_get: os.#Container & {
@@ -20,32 +23,33 @@ deps_get: os.#Container & {
 	cache: {
 		"/app/deps": true
 	}
-	command: """
-		  mix deps.get
-		"""
 	env:
 		MIX_ENV: "test"
+	command: "mix deps.get"
+	// Directory in which the command is executed
 	dir: "/app"
 }
 
-// How do I run this AFTER deps_get?
-// I will need to share the /apps/deps volume from deps_get
 deps_compile: os.#Container & {
 	image: docker.#Pull & {
 		from: "thechangelog/runtime:2021-05-29T10.17.12Z"
 	}
-	mount: {
-		"/app": from: source
+	copy: "/app": from: os.#Dir & {
+		from: deps_get
+		path: "/app"
 	}
 	cache: {
-		"/app/deps":   true
 		"/app/_build": true
 	}
-	command: """
-		  mix deps.compile
-		"""
-	env:
+	env: {
+		// Reference a variable from deps_get so that this #up is linked to that #up
 		MIX_ENV: deps_get.env.MIX_ENV
+	}
+	command: #"""
+		find .
+		mix deps.compile
+		"""#
+	// Directory in which the command is executed
 	dir: "/app"
 }
 
