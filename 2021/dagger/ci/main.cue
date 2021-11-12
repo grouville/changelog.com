@@ -10,61 +10,34 @@ import (
 // dagger input dir source .
 source: dagger.#Artifact
 
-// [ for env in 
-
 // Starting point: .circleci/config.yml
 deps_get: os.#Container & {
 	image: docker.#Pull & {
 		from: "thechangelog/runtime:2021-05-29T10.17.12Z"
 	}
-	mount: {
-		"/app": from: source
-	}
-	cache: {
-		"/app/deps": true
-	}
+	copy: "/app": from: source
 	env:
 		MIX_ENV: "test"
 	command: "mix deps.get"
-	// Directory in which the command is executed
-	dir: "/app"
+	dir:     "/app"
 }
 
 deps_compile: os.#Container & {
-	image: docker.#Pull & {
-		from: "thechangelog/runtime:2021-05-29T10.17.12Z"
-	}
-	copy: "/app": from: os.#Dir & {
-		from: deps_get
-		path: "/app"
-	}
-	cache: {
-		"/app/_build": true
-	}
+	image: deps_get
+	cache: "/app/_build": true
 	env: {
 		// Reference a variable from deps_get so that this #up is linked to that #up
 		MIX_ENV: deps_get.env.MIX_ENV
 	}
 	command: #"""
-		find .
+		find deps
 		mix deps.compile
 		"""#
-	// Directory in which the command is executed
 	dir: "/app"
 }
 
-// 🤔 How do we spin another container for PostgreSQL, and tear it down when done?
+// Start PostgreSQL Docker container:
+// https://github.com/thechangelog/changelog.com/blob/fb661d0cf3a4db731d46ef7f1cec44a5d1f4581a/.circleci/config.yml#L55-L59
 
-// prod: os.#Container & {
-//  image: docker.#Pull & {
-//   from: "thechangelog/runtime:2021-05-29T10.17.12Z"
-//  }
-//  mount: "/app": from: source
-//  command: """
-//     mix do deps.get, deps.compile
-//     cd assets && yarn install --frozen-lockfile
-//   """
-//  env:
-//   MIX_ENV: "prod"
-//  dir: "/app"
-// }
+// Wait for PostgreSQL to start, then run tests:
+// https://github.com/thechangelog/changelog.com/blob/fb661d0cf3a4db731d46ef7f1cec44a5d1f4581a/.circleci/config.yml#L66-L76
