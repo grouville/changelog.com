@@ -15,7 +15,6 @@ nginx
 priv/db
 priv/uploads
 script
-test
 tmp
 .all-contributorsrc
 .autocomplete*

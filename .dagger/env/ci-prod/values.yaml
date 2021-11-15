@@ -1,8 +1,8 @@
 plan:
-    package: ./2021/dagger/ci
-name: ci
+    package: ./2021/dagger/ci/prod
+name: ci-prod
 inputs:
-    source:
+    app:
         dir:
             path: .
             exclude:
@@ -23,7 +23,6 @@ inputs:
                 - priv/db
                 - priv/uploads
                 - script
-                - test
                 - tmp
                 - .all-contributorsrc
                 - .autocomplete
@@ -48,14 +47,14 @@ sops:
         - recipient: age1ag8qa42h7up3p3xngup00ps36uvyek59ppc9z4wxq7rwk4pjcaus4aya7l
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBvd0I3M3B6Y1JNTkhhU0pI
-            cFdURG9JMStpU1B5M3EzZyt5THZheWY2S2djCkFDWXVwZEh2c200RGp1ZklTTTVl
-            a2FOb2xqa0NjYUI5RTY5clNSK09rL0kKLS0tIFJZeTVPVXpiSjFyREJxSFJwNFQ5
-            OWM2YVhtQlljdlh6YnVpaFYycmo2cTQK7B3kcUSG6JC4AHuCyRDRVMUva5VUaB/D
-            90PovCcr0I9UdlpGB0YAF9uBeC7qM1qzrwnHOZ0jm+TYcdY8mA4AxQ==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBsejZ4c3N2U1ZLNlQ4Q1g5
+            QzNNTUYzTnhDaWVvT1ZZMUwzM3p1R200MzN3CnE2YkVVOTFOTE1WLzVhTkVBUWtH
+            cnFhWTVTWExMZzhaeit3dHM1cXVBNE0KLS0tIFRxeUhWemhwWXZLWDZzM3lLaFdY
+            MWsybjhYRUVhejFDM3FGNjBzQTB0OVkKiViX/wbIHxnoXqTLj2AOoIGi/m9MvGpO
+            nYjsElW5l6WcDMc/MaBPfc1D4E9RbO4gTgTsvoPKepqTnilunCaAzg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2021-11-11T22:27:45Z"
-    mac: ENC[AES256_GCM,data:MYkOoDkqJ9ND6SFLevhGMfosMehwvvYUFjZpGzAgMQeS9dze5rJkBs5yn2e3jF+zNnIdD9t5gp94ydJpXkDgyAQwN6USxWY7I1tqoxMXoAuBieUzj+MShzDXNrbsoCtBpiHcbeVydIy8OGqkdZ5b9md1IHyR416Ork6GGJzxN54=,iv:OhAL1/Bpf1jS0yBO2Mq98T4yrW7dXHmeRfmnYcJG/kQ=,tag:zhbP0WIVtlA1mh/pP7Q7EA==,type:str]
+    lastmodified: "2021-11-15T18:00:25Z"
+    mac: ENC[AES256_GCM,data:Sw09ADLqvCJiGMxGPCU+ydxthvU9OccVCl+BuaeoPx1ZwqqYo1fsQAp41trMTboGZB7xlh4PLTzUj+LMP+wdUhZVdWXhOKL48AeSyLa1wTOKTEiIq4B4njaED6cpIrXAqIKB0C+FjwCJaxu0YVVA8ekeRNKvSyDD5j/NgDJNQBM=,iv:3NDMQYRojwrJxJKnkuxsGIp5DYRO2YLmFvLSENyYwnU=,tag:gnmJiUU6HT5hARkuTfLzgw==,type:str]
     pgp: []
     encrypted_suffix: secret
     version: 3.7.1

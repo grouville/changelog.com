@@ -1,0 +1,60 @@
+plan:
+    package: ./2021/dagger/ci/test
+name: ci-test
+inputs:
+    app:
+        dir:
+            path: .
+            exclude:
+                - .circleci
+                - .dagger
+                - .git
+                - .github
+                - "2021"
+                - "2022"
+                - _build/dev
+                - _build/test
+                - assets/node_modules
+                - cue.mod
+                - dev_docker
+                - docker
+                - import
+                - nginx
+                - priv/db
+                - priv/uploads
+                - script
+                - tmp
+                - .all-contributorsrc
+                - .autocomplete
+                - .credo.exs
+                - .dockerignore
+                - .formatter.exs
+                - .envrc
+                - .env
+                - .gitattributes
+                - .gitignore
+                - .kube
+                - coveralls.json
+                - start_dev_stack.sh
+                - erl_crash.dump
+                - deps
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age1ag8qa42h7up3p3xngup00ps36uvyek59ppc9z4wxq7rwk4pjcaus4aya7l
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBIUGQ0OGNVSFBheWF6WnVt
+            UXpxaERNM2pZdFZCMDZjUW94WVlCWUlNSHdNCjB4TTY5Qm1LVERCcWVCZkwvLzZp
+            SmNxclllWVphOTFrZ2cwR010bUlQYncKLS0tIFEwMnQrekJTRjEyV0xmdElxaWs5
+            N0ZYaWRCUTFPcGZFakExMFdUalM0eXcKP7EAopcGmtoYy0WEnT9VslKJ/RsNL5HZ
+            LLNoDQT84/nV/NDMaNYS0Uc9GY08fITseKskvKHY1LRdsgqCbtPkMw==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2021-11-15T18:03:12Z"
+    mac: ENC[AES256_GCM,data:D3M8WOYWe45vX8fh+5fhQoPGxUu+KTCrccy1bVAWLPQqEhWVgLUkluQ3EIRPSGp/oAMhlrO5MslcHIHObrxuxXs4J+YIecxv2PAq/POrHdkyaAWvTS6LrvfU4DDbAj/B862kN63zHcuOkwf+7IMLlC6tD77nRthm734GZYhmcLo=,iv:NPO/xE7vxYxMdo8H7CgxkW+F6JrfQDeZrZfUnNf2J4k=,tag:x+CF9TA7Gi2h14lZLtiGkg==,type:str]
+    pgp: []
+    encrypted_suffix: secret
+    version: 3.7.1
