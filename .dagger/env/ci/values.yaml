@@ -1,6 +1,6 @@
 plan:
-    package: ./2021/dagger/ci/prod
-name: ci-prod
+    package: ./2021/dagger/ci
+name: ci
 inputs:
     app:
         dir:
@@ -38,6 +38,8 @@ inputs:
                 - start_dev_stack.sh
                 - erl_crash.dump
                 - deps
+    docker_host:
+        text: tcp://100.113.182.91:2375
 sops:
     kms: []
     gcp_kms: []
@@ -47,14 +49,14 @@ sops:
         - recipient: age1ag8qa42h7up3p3xngup00ps36uvyek59ppc9z4wxq7rwk4pjcaus4aya7l
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBsejZ4c3N2U1ZLNlQ4Q1g5
-            QzNNTUYzTnhDaWVvT1ZZMUwzM3p1R200MzN3CnE2YkVVOTFOTE1WLzVhTkVBUWtH
-            cnFhWTVTWExMZzhaeit3dHM1cXVBNE0KLS0tIFRxeUhWemhwWXZLWDZzM3lLaFdY
-            MWsybjhYRUVhejFDM3FGNjBzQTB0OVkKiViX/wbIHxnoXqTLj2AOoIGi/m9MvGpO
-            nYjsElW5l6WcDMc/MaBPfc1D4E9RbO4gTgTsvoPKepqTnilunCaAzg==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA0MmhnMHFZZS9Ea3lUTm5D
+            ck1mUXhIYUZVOHpkRXlBaEI2VnpaK0J5VUZJCmdpb3RJTnprT2pCbVJIYVR2eVor
+            ajFrWlczWmxiVHd0ZU8rUWRsRjU2OWcKLS0tIEg2WG5IWUc1ZzZ5SXBOVHdMdDlM
+            cmdMbkpUL1djUlAxZzJZY3BKS2FHSHcKPnWXKGjp3SrIninwwtth5YNFNdFZaE+H
+            1EilpFF7Tn/RQNLcv257uofciczvXiOPwn+f7QJwF7zCaifNENbuhw==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2021-11-15T18:00:25Z"
-    mac: ENC[AES256_GCM,data:Sw09ADLqvCJiGMxGPCU+ydxthvU9OccVCl+BuaeoPx1ZwqqYo1fsQAp41trMTboGZB7xlh4PLTzUj+LMP+wdUhZVdWXhOKL48AeSyLa1wTOKTEiIq4B4njaED6cpIrXAqIKB0C+FjwCJaxu0YVVA8ekeRNKvSyDD5j/NgDJNQBM=,iv:3NDMQYRojwrJxJKnkuxsGIp5DYRO2YLmFvLSENyYwnU=,tag:gnmJiUU6HT5hARkuTfLzgw==,type:str]
+    lastmodified: "2021-11-16T18:48:22Z"
+    mac: ENC[AES256_GCM,data:xvQxcGXf1sd+CMpt3ip3vULfaZUt/piiLhIK1pCvrgOoNh8KiTaaiLvUP4GRhqPeGWK/aGgHwz9Oa+3xUh6TOihAjiSqyjDi0tYmqs5PSN9hhzut2WTRec0QRwsVDt4Gjon3hDN1zBGue5srDMhf99gDRhqfX+K/ZGOW48Z1Yx0=,iv:By5DUKpI85v8CRp4dqgrE/RCoQ1YtTFHZ8silzN5xq4=,tag:Jj8RxGEIHtZpBIVFWICFXA==,type:str]
     pgp: []
     encrypted_suffix: secret
     version: 3.7.1
