@@ -47,17 +47,17 @@ $(DAGGER_HOME): | $(DAGGER)
 .PHONY: dagger-init
 dagger-init: | $(DAGGER_HOME)
 
+$(DAGGER_ENV)/ci: | dagger-init
+	$(DAGGER_CTX) new ci --package $(CURDIR)/dagger/ci
+
 define _convert_dockerignore_to_excludes
 awk '{ print "--exclude " $$1 }' < $(BASE_DIR)/.dockerignore
 endef
-$(DAGGER_ENV)/ci: | dagger-init
-	$(DAGGER_CTX) new ci --package $(CURDIR)/dagger/ci
+.PHONY: dagger-ci
+dagger-ci: $(DAGGER_ENV)/ci
 	@printf "$(BOLD)TODO$(RESET) $(CYAN)Document multiple $(BOLD)--exclude$(RESET)$(CYAN) statements$(RESET)\n"
 	$(DAGGER_CTX) input dir app . $(shell $(_convert_dockerignore_to_excludes)) --exclude deps --environment ci
 	$(DAGGER_CTX) input text docker_host $(DOCKER_HOST) --environment ci
-
-.PHONY: dagger-ci
-dagger-ci: $(DAGGER_ENV)/ci
 	@printf "$(BOLD)TODO$(RESET) $(CYAN)Remove $(BOLD)JAEGER_TRACE$(RESET)$(CYAN) from docs, it no longer works multiple$(RESET)\n"
 	$(DAGGER_CTX) up --log-level debug --environment ci
 

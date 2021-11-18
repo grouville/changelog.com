@@ -17,7 +17,6 @@ inputs:
                 - assets/node_modules
                 - cue.mod
                 - dev_docker
-                - docker
                 - import
                 - nginx
                 - priv/db
@@ -55,8 +54,8 @@ sops:
             cmdMbkpUL1djUlAxZzJZY3BKS2FHSHcKPnWXKGjp3SrIninwwtth5YNFNdFZaE+H
             1EilpFF7Tn/RQNLcv257uofciczvXiOPwn+f7QJwF7zCaifNENbuhw==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2021-11-16T18:48:22Z"
-    mac: ENC[AES256_GCM,data:xvQxcGXf1sd+CMpt3ip3vULfaZUt/piiLhIK1pCvrgOoNh8KiTaaiLvUP4GRhqPeGWK/aGgHwz9Oa+3xUh6TOihAjiSqyjDi0tYmqs5PSN9hhzut2WTRec0QRwsVDt4Gjon3hDN1zBGue5srDMhf99gDRhqfX+K/ZGOW48Z1Yx0=,iv:By5DUKpI85v8CRp4dqgrE/RCoQ1YtTFHZ8silzN5xq4=,tag:Jj8RxGEIHtZpBIVFWICFXA==,type:str]
+    lastmodified: "2021-11-18T18:33:15Z"
+    mac: ENC[AES256_GCM,data:cDBMBBfBXjLwrH+oUj0tiVT0l8252caNhPY/vhSkM6E9H0dJT5CnXyXDvaVMfvpfKuxpw3W4kRTd1+e7YKwq8GfiOJociDXTEDLaluiQ1BikYfKI/q1Vsn1/iSzmN8wBmqvg1bYYXa3S6Q5ZC9VJNLQmSRnXkqgfREEmslmQ3K4=,iv:Q52I83IU3nvPFqfxhC1OLs7dkh5Ulj5ww97A8xac0ys=,tag:c+si6DwxcSwCk0qcMP+dBA==,type:str]
     pgp: []
     encrypted_suffix: secret
     version: 3.7.1

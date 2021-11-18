@@ -9,7 +9,6 @@ _build/test
 assets/node_modules
 cue.mod
 dev_docker
-docker
 import
 nginx
 priv/db

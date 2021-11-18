@@ -140,4 +140,18 @@ stop_test_db: docker2.#Command & {
 		"""#
 }
 
-// Build & publish final image to container registry
+prod_dockerfile: ({os.#File & {
+	from: prod_deps
+	path: "/app/docker/Dockerfile.production"
+}}).contents
+
+build_prod_image: docker.#Build & {
+	source:     prod_assets
+	dockerfile: prod_dockerfile
+}
+
+// Publish prod_image to container registry
+// remoteImage: docker.#Push & {
+//  target: "\(registry):\(tag)"
+//  source: image
+// }
