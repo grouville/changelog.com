@@ -4,12 +4,14 @@ package ci
 
 import (
 	"alpha.dagger.io/dagger"
+	"alpha.dagger.io/dagger/op"
 	"alpha.dagger.io/docker"
 	"alpha.dagger.io/os"
 	"github.com/thechangelog/dagger/docker2"
 )
 
 app:                    dagger.#Artifact
+dockerfile:             dagger.#Artifact
 docker_host:            dagger.#Input & {string}
 app_container_image:    "thechangelog/runtime:2021-05-29T10.17.12Z"
 test_db_container_name: "changelog_test_postgres"
@@ -26,10 +28,11 @@ dev_deps: os.#Container & {
 	// We want to share this across builds
 	env: {
 		MIX_ENV: "dev"
+		DEP:     "self"
 	}
 	command: #"""
-		mix do deps.get, deps.compile, compile
-		ls -lah _build/$MIX_ENV/lib/phoenix/ebin/*.beam
+		echo 'mix do deps.get, deps.compile, compile'
+		echo 'ls -lah _build/$MIX_ENV/lib/phoenix/ebin/*.beam'
 		"""#
 	dir: "/app"
 }
@@ -41,16 +44,12 @@ test_deps: os.#Container & {
 	copy: {
 		"/app": from: app
 	}
-	// cache: {
-	//  "/app/deps":   true
-	//  "/app/_build": true
-	// }
 	env: {
 		MIX_ENV: "test"
 	}
 	command: #"""
-		mix do deps.get, deps.compile, compile
-		ls -lah _build/$MIX_ENV/lib/phoenix/ebin/*.beam
+		echo 'mix do deps.get, deps.compile, compile'
+		echo 'ls -lah _build/$MIX_ENV/lib/phoenix/ebin/*.beam'
 		"""#
 	dir: "/app"
 }
@@ -62,16 +61,13 @@ prod_deps: os.#Container & {
 	copy: {
 		"/app": from: app
 	}
-	// cache: {
-	//  "/app/deps":   true
-	//  "/app/_build": true
-	// }
 	env: {
+		DEP:     "self"
 		MIX_ENV: "prod"
 	}
 	command: #"""
-		mix do deps.get, deps.compile, compile
-		ls -lah _build/$MIX_ENV/lib/phoenix/ebin/*.beam
+		echo 'mix do deps.get, deps.compile, compile'
+		echo 'ls -lah _build/$MIX_ENV/lib/phoenix/ebin/*.beam'
 		"""#
 	dir: "/app"
 }
@@ -79,8 +75,8 @@ prod_deps: os.#Container & {
 dev_assets: os.#Container & {
 	image: dev_deps
 	command: #"""
-		yarn install --frozen-lockfile
-		yarn run compile
+		echo 'yarn install --frozen-lockfile'
+		echo 'yarn run compile'
 		"""#
 	dir: "/app/assets"
 }
@@ -93,7 +89,7 @@ prod_assets: os.#Container & {
 	env: {
 		MIX_ENV: "prod"
 	}
-	command: "mix phx.digest"
+	command: "echo 'mix phx.digest'"
 	dir:     "/app"
 }
 
@@ -125,7 +121,7 @@ test: os.#Container & {
 		MIX_ENV: "test"
 		DEP:     start_test_db.host
 	}
-	command: "mix test"
+	command: "echo 'mix test'"
 	dir:     "/app"
 }
 
@@ -140,14 +136,34 @@ stop_test_db: docker2.#Command & {
 		"""#
 }
 
-prod_dockerfile: ({os.#File & {
-	from: prod_deps
-	path: "/app/docker/Dockerfile.production"
-}}).contents
+test_prod_assets: os.#Container & {
+	always: true
+	image:  prod_deps
+	command: #"""
+		set -x
+		ls -lah _build
+		ls -lah priv
+		mkdir /app2
+		cp -r /app /app2
+		ls -lah /app
+		ls -lah /app2
+		"""#
+	dir: "/app"
+}
 
-build_prod_image: docker.#Build & {
-	source:     prod_assets
-	dockerfile: prod_dockerfile
+// prod_dockerfile: ({os.#File & {
+//  from: prod_deps
+//  path: "/app/docker/Dockerfile.production"
+// }}).contents
+
+prod_image: op.#DockerBuild & {
+	context:    prod_assets
+	dockerfile: dockerfile
+}
+
+publish: docker.#Push & {
+	source: prod_image
+	target: "thechangelog/changelog.com:dagger"
 }
 
 // Publish prod_image to container registry
