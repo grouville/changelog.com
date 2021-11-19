@@ -11,7 +11,7 @@ import (
 )
 
 app:                    dagger.#Artifact
-dockerfile:             dagger.#Artifact
+prod_dockerfile:        dagger.#Artifact
 docker_host:            dagger.#Input & {string}
 app_container_image:    "thechangelog/runtime:2021-05-29T10.17.12Z"
 test_db_container_name: "changelog_test_postgres"
@@ -158,7 +158,7 @@ test_prod_assets: os.#Container & {
 
 prod_image: op.#DockerBuild & {
 	context:    prod_assets
-	dockerfile: dockerfile
+	dockerfile: prod_dockerfile
 }
 
 publish: docker.#Push & {

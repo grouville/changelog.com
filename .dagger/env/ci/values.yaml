@@ -67,6 +67,33 @@ inputs:
             EXPOSE 4000
 
             CMD make on-app-start; mix do ecto.create, ecto.migrate, phx.server
+    prod_dockerfile:
+        text: |
+            FROM thechangelog/legacy_assets AS legacy_assets
+            FROM thechangelog/runtime:2021-05-29T10.17.12Z
+
+            RUN mkdir /app
+            COPY /app /app
+            WORKDIR /app
+            RUN ls -lah
+            RUN exit 1
+
+            COPY --from=legacy_assets /var/www/wp-content /app/priv/wp-content
+
+            ENV MIX_ENV=prod
+            ENV TERM=xterm
+
+            # Used by PromEx for annotations
+            ARG APP_VERSION
+            ARG GIT_SHA
+            ARG GIT_AUTHOR
+            ENV APP_VERSION=${APP_VERSION}
+            ENV GIT_SHA=${GIT_SHA}
+            ENV GIT_AUTHOR=${GIT_AUTHOR}
+
+            EXPOSE 4000
+
+            CMD make on-app-start; mix do ecto.create, ecto.migrate, phx.server
 sops:
     kms: []
     gcp_kms: []
@@ -82,8 +109,8 @@ sops:
             cmdMbkpUL1djUlAxZzJZY3BKS2FHSHcKPnWXKGjp3SrIninwwtth5YNFNdFZaE+H
             1EilpFF7Tn/RQNLcv257uofciczvXiOPwn+f7QJwF7zCaifNENbuhw==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2021-11-19T06:36:42Z"
-    mac: ENC[AES256_GCM,data:u9NCQ5W2stHlvYBfx1p+uqnWIdquouTaKqUvZXf/+rLkg9hjbb3gpWzG//jM8NGqoD0HIBn6777o+SpKObWkS+zsSq1p600b4G8XGI3XXiXtDtfhsQEXqUkxr+fI1lpo1Z9F/DU4ncwAUtUfQ/mhf/+tM0FJPPxEihh70JNyyN0=,iv:853GozJbIcnC4jFK1dRLVLUs5xD9cnvF43ob8ai2o/c=,tag:2I1toFp4rH3H9XvWTOo5pg==,type:str]
+    lastmodified: "2021-11-19T17:21:34Z"
+    mac: ENC[AES256_GCM,data:QbJQKo9pD0zIQXjWmAr5k/ry/HvCT3E6c5IGPc9gr+ya+KnH+VpmepzVfZH8NfEguu47hWt9KkN/dUxDhujJl/mQIbKrS7YerSzCINLMyCU0n6HSzhn1m2bfyxW8l4hcy6H+/rYSOr3PvkzhrXBeuQ1sPesZ1GoAUjTD3hXbnAI=,iv:0bbrN8gLdxh3/RUkV5pfiayVPNd93CLIjSUf4xuyO1k=,tag:pSQBm+nz9aZX2YBqImaecA==,type:str]
     pgp: []
     encrypted_suffix: secret
     version: 3.7.1
