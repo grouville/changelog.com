@@ -15,6 +15,8 @@ prod_dockerfile:        dagger.#Artifact
 docker_host:            dagger.#Input & {string}
 app_container_image:    "thechangelog/runtime:2021-05-29T10.17.12Z"
 test_db_container_name: "changelog_test_postgres"
+dockerhub_username:     dagger.#Input & {string}
+dockerhub_password:     dagger.#Input & {dagger.#Secret}
 
 dev_deps: os.#Container & {
 	image: docker.#Pull & {
@@ -162,6 +164,10 @@ prod_image: op.#DockerBuild & {
 }
 
 publish: docker.#Push & {
+	auth: {
+		username: dockerhub_username
+		secret:   dockerhub_password
+	}
 	source: prod_image
 	target: "thechangelog/changelog.com:dagger"
 }
