@@ -33,8 +33,8 @@ dev_deps: os.#Container & {
 		DEP:     "self"
 	}
 	command: #"""
-		echo 'mix do deps.get, deps.compile, compile'
-		echo 'ls -lah _build/$MIX_ENV/lib/phoenix/ebin/*.beam'
+		mix do deps.get, deps.compile, compile
+		ls -lah _build/$MIX_ENV/lib/phoenix/ebin/*.beam
 		"""#
 	dir: "/app"
 }
@@ -50,8 +50,8 @@ test_deps: os.#Container & {
 		MIX_ENV: "test"
 	}
 	command: #"""
-		echo 'mix do deps.get, deps.compile, compile'
-		echo 'ls -lah _build/$MIX_ENV/lib/phoenix/ebin/*.beam'
+		mix do deps.get, deps.compile, compile
+		ls -lah _build/$MIX_ENV/lib/phoenix/ebin/*.beam
 		"""#
 	dir: "/app"
 }
@@ -68,8 +68,8 @@ prod_deps: os.#Container & {
 		MIX_ENV: "prod"
 	}
 	command: #"""
-		echo 'mix do deps.get, deps.compile, compile'
-		echo 'ls -lah _build/$MIX_ENV/lib/phoenix/ebin/*.beam'
+		mix do deps.get, deps.compile, compile
+		ls -lah _build/$MIX_ENV/lib/phoenix/ebin/*.beam
 		"""#
 	dir: "/app"
 }
@@ -77,8 +77,8 @@ prod_deps: os.#Container & {
 dev_assets: os.#Container & {
 	image: dev_deps
 	command: #"""
-		echo 'yarn install --frozen-lockfile'
-		echo 'yarn run compile'
+		yarn install --frozen-lockfile
+		yarn run compile
 		"""#
 	dir: "/app/assets"
 }
@@ -91,7 +91,7 @@ prod_assets: os.#Container & {
 	env: {
 		MIX_ENV: "prod"
 	}
-	command: "echo 'mix phx.digest'"
+	command: "mix phx.digest"
 	dir:     "/app"
 }
 
@@ -123,7 +123,7 @@ test: os.#Container & {
 		MIX_ENV: "test"
 		DEP:     start_test_db.host
 	}
-	command: "echo 'mix test'"
+	command: "mix test"
 	dir:     "/app"
 }
 
