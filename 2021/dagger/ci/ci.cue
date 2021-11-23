@@ -18,6 +18,19 @@ test_db_container_name: "changelog_test_postgres"
 dockerhub_username:     dagger.#Input & {string}
 dockerhub_password:     dagger.#Input & {dagger.#Secret}
 
+// dev_deps | test_deps | prod_deps | start_test_db
+// |                  |  /|                  /|
+// |                  | / test_prod_assets  / |
+// |                  |/                   /  |
+// |                  /                   /   |
+// |- dev_assets     /|                  /    |
+//    |- prod_assets/  \                /     |
+//    |                 \-- test ------/      stop_test_db
+//    |                     /
+//    |- prod_image        /
+//       |                /
+//       |- publish ------
+
 dev_deps: os.#Container & {
 	image: docker.#Pull & {
 		from: app_container_image
@@ -120,8 +133,9 @@ test: os.#Container & {
 	always: true
 	image:  test_deps
 	env: {
-		MIX_ENV: "test"
-		DEP:     start_test_db.host
+		MIX_ENV:              "test"
+		DEP:                  start_test_db.host
+		"dockerhub_username": dockerhub_username
 	}
 	command: "mix test"
 	dir:     "/app"
@@ -171,7 +185,7 @@ prod_image: {
 
 publish: docker.#Push & {
 	auth: {
-		username: dockerhub_username
+		username: test.env.dockerhub_username
 		secret:   dockerhub_password
 	}
 	source: prod_image
