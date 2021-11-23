@@ -5,7 +5,6 @@ RUN mkdir /app
 COPY /app /app
 WORKDIR /app
 RUN ls -lah
-RUN exit 1
 
 COPY --from=legacy_assets /var/www/wp-content /app/priv/wp-content
 

@@ -53,7 +53,6 @@ inputs:
             COPY /app /app
             WORKDIR /app
             RUN ls -lah
-            RUN exit 1
 
             COPY --from=legacy_assets /var/www/wp-content /app/priv/wp-content
 
@@ -86,8 +85,8 @@ sops:
             SnF2bUoyV2kzMHVFMW1QSXg1MkxQNXcKK8gEBqG3EE4cquSUoQpC9OcFdUl/aJn3
             a3OhLCZLkB9/8CEd5IQ5QtUvIBK3fQe+3/zNkTNRLvay3OmWwKB8cA==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2021-11-22T08:57:26Z"
-    mac: ENC[AES256_GCM,data:7jEnYiokYkrbLsJcRhxfV9oMVZbkZKB+9Yc4AlvJk184dVGvCjoAE48pLEWFO139o/IJTytKhjVrRwRj9zqMUQA/IHV9L2PXI1Dr59NiBr/TJdxM/8xdGGTmVCq/4mpZycEdZTnEmsnSJIv4iCz6HZA5hrTu4aOKd/9QZsf68fg=,iv:WSbQ1U3ounfVSYqVW+oShJkAThltho5NODpkik7YAHo=,tag:xUHZj4sHq7C0Bqh8KPoCIQ==,type:str]
+    lastmodified: "2021-11-23T08:54:47Z"
+    mac: ENC[AES256_GCM,data:duo4IVvw4RaGec58sdXW9D942zgQIzggCfog06w8uiCrmgp40fe/dxP+G6T9147MBBXSm3n190Aw2Lup7TuQAn3X/5Cih6X9WDe/mz1nz+R3V/HvsMeRF53f6zAyZzT7H9GwQd3SU+Qwx2vdOnzgvueupKWjVKC1dW6TBWXmUXM=,iv:BYshci/ZnFc7VJEgzOFoRebinSWwNAk4KeDOa0gregE=,tag:C6GX91tgzCbHqjPI1D6yZg==,type:str]
     pgp: []
     encrypted_suffix: secret
     version: 3.7.1

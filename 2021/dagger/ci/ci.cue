@@ -153,14 +153,20 @@ test_prod_assets: os.#Container & {
 	dir: "/app"
 }
 
-// prod_dockerfile: ({os.#File & {
-//  from: prod_deps
-//  path: "/app/docker/Dockerfile.production"
-// }}).contents
-
-prod_image: op.#DockerBuild & {
-	context:    prod_assets
-	dockerfile: prod_dockerfile
+// We should only run this step if test succeeds,
+// otherwise we would be building a prod artefact for code that fails tests
+prod_image: {
+	#up: [
+		op.#Load & {
+			from: prod_assets
+		},
+		op.#DockerBuild & {
+			// Why does this context re-run previous steps?
+			// Rather than running mix, yarn commands etc. it should consume the result of those steps
+			context:    prod_assets
+			dockerfile: prod_dockerfile
+		},
+	]
 }
 
 publish: docker.#Push & {
