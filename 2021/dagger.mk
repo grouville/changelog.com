@@ -61,7 +61,7 @@ define _convert_dockerignore_to_excludes
 awk '{ print "--exclude " $$1 }' < $(BASE_DIR)/.dockerignore
 endef
 .PHONY: dagger-ci
-dagger-ci: $(DAGGER_ENV)/ci $(LPASS)
+dagger-ci: $(DAGGER_ENV)/ci
 	@printf "$(BOLD)TODO$(RESET) $(CYAN)Document multiple $(BOLD)--exclude$(RESET)$(CYAN) statements$(RESET)\n"
 	$(DAGGER_CTX) input dir app . $(shell $(_convert_dockerignore_to_excludes)) --exclude deps --environment ci
 	$(DAGGER_CTX) input text prod_dockerfile --file docker/Dockerfile.production --environment ci
