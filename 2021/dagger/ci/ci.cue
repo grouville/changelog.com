@@ -6,13 +6,14 @@ import (
 	"alpha.dagger.io/dagger"
 	"alpha.dagger.io/dagger/op"
 	"alpha.dagger.io/docker"
+	"alpha.dagger.io/http"
 	"alpha.dagger.io/os"
-	"github.com/thechangelog/dagger/docker2"
+	// "github.com/thechangelog/dagger/docker2"
 )
 
 app:                    dagger.#Artifact
 prod_dockerfile:        dagger.#Artifact
-docker_host:            dagger.#Input & {string}
+docker_socket:          dagger.#Input & {dagger.#Stream}
 app_container_image:    "thechangelog/runtime:2021-05-29T10.17.12Z"
 test_db_container_name: "changelog_test_postgres"
 dockerhub_username:     dagger.#Input & {string}
@@ -108,8 +109,8 @@ prod_assets: os.#Container & {
 	dir:     "/app"
 }
 
-start_test_db: docker2.#Command & {
-	host: docker_host
+start_test_db: docker.#Command & {
+	socket: docker_socket
 	env: {
 		CONTAINER_NAME: test_db_container_name
 	}
@@ -134,15 +135,16 @@ test: os.#Container & {
 	image:  test_deps
 	env: {
 		MIX_ENV:              "test"
-		DEP:                  start_test_db.host
+		DEP:                  start_test_db.env.CONTAINER_NAME
 		"dockerhub_username": dockerhub_username
+		forced_dependency: "localhost:5042" // Forced dependency here for local version
 	}
 	command: "mix test"
 	dir:     "/app"
 }
 
-stop_test_db: docker2.#Command & {
-	host: docker_host
+stop_test_db: docker.#Command & {
+	socket: docker_socket
 	env: {
 		DEP:            test.env.DEP
 		CONTAINER_NAME: test_db_container_name
@@ -170,6 +172,9 @@ test_prod_assets: os.#Container & {
 // Build image eagerly, but only publish if test succeeds
 prod_image: {
 	#up: [
+		// op.#Load & {
+		// 	from: prod_assets
+		// },
 		op.#DockerBuild & {
 			// Why does this context re-run previous steps?
 			// Rather than running mix, yarn commands etc. it should consume the result of those steps
@@ -189,13 +194,43 @@ prod_image: {
 		},
 	]
 }
+// No use op.#DockerBuild, use the docker engine instead
+// Start w result of prod_asset, we take the Prod_dockerfile, and we build our final image
+// eq to start_test_db
 
+//  Replaced by change below
+// publish: docker.#Push & {
+// 	auth: {
+// 		username: test.env.dockerhub_username
+// 		secret:   dockerhub_password
+// 	}
+// 	source: prod_image
+// 	target: "thechangelog/changelog.com:dagger"
+// }
+
+
+// run our local registry
+registry: docker.#Run & {
+	ref:  "registry:2"
+	name: "registry-local"
+	ports: ["5042:5000"]
+	socket: docker_socket
+}
+
+// // As we pushed the registry to our local docker
+// we need to wait for the container to be up
+wait: http.#Wait & {
+	url: test.env.forced_dependency // dependency on test created here
+	startPeriod: 30
+}
+
+// push the image to a registry
 publish: docker.#Push & {
-	auth: {
-		// Only push the image if the test succeeds:
-		username: test.env.dockerhub_username
-		secret:   dockerhub_password
-	}
+	// leave target blank here so that different
+	// environments can push to different registries
+	target: "\(wait.url)/changelog" // dependency on runnin container here
+
+	// the source of our push resource
+	// is the image resource we declared above
 	source: prod_image
-	target: "thechangelog/changelog.com:dagger"
 }

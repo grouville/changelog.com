@@ -38,12 +38,13 @@ inputs:
                 - start_dev_stack.sh
                 - erl_crash.dump
                 - deps
-    docker_host:
-        text: tcp://100.113.182.91:2375
+    docker_socket:
+        socket:
+            unix: /var/run/docker.sock
     dockerhub_password:
-        secret: ENC[AES256_GCM,data:mux+4PIvbF1yivwRRJFQSQeocA==,iv:Na9nUxzm4X+RBUzdAjZeGrZWBuZkC9EmGM+5z3EdC9Q=,tag:rH5yCbj2SrA3t3PXj5T82g==,type:str]
+        secret: ENC[AES256_GCM,data:fldDnjY0YR8MJmua,iv:XWm62ByPmXgLuXfqSp0gVdKRfnJUv4ssGnIeVJkq43s=,tag:MYnqajLlBCr/2+UmbePTxA==,type:str]
     dockerhub_username:
-        text: gerhard
+        text: grouville
     prod_dockerfile:
         text: |
             FROM thechangelog/legacy_assets AS legacy_assets
@@ -83,14 +84,14 @@ sops:
     azure_kv: []
     hc_vault: []
     age:
-        - recipient: age1ag8qa42h7up3p3xngup00ps36uvyek59ppc9z4wxq7rwk4pjcaus4aya7l
+        - recipient: age1gxwmtwahzwdmrskhf90ppwlnze30lgpm056kuesrxzeuyclrwvpsupwtpk
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBBOEVoWmhTc2M3eTMyRmsw
-            aHErM3ljcFl0NDhDM1B0dllVTE50NlZRYXdvCkhiYXExbXRDaC82UnJQd3dVaysy
-            YWxnS0Y2cFlkdlM5ZWMwb0EvKzhzT0UKLS0tIHZvMWFxdDFGbTBsY3c3dkhuRXIz
-            SnF2bUoyV2kzMHVFMW1QSXg1MkxQNXcKK8gEBqG3EE4cquSUoQpC9OcFdUl/aJn3
-            a3OhLCZLkB9/8CEd5IQ5QtUvIBK3fQe+3/zNkTNRLvay3OmWwKB8cA==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBtSXdOaVpFMy9aS05sRjhL
+            eHF4WXRYdmp2cUVpSDhpT1c4ejJuS3BPWnhZClJKTHFaY09zMzBOV1BBUXFzUWNK
+            bElwanN4Wjg0RmtIRUZZZUllVlBCMkEKLS0tIHQ3Q0RERm9GZkJGanM2cTd5Uldw
+            eG81RzRINmxJSTYxdWQxTjM5ZjJNY0UKjwy2eSMewQ54pgJb3bnoo8mp4qZ9fwcW
+            jCdc0hHUHfeXcM+nn/jafZdGjVT0qhV3p8bxQrxvZRj8N+shii5hgQ==
             -----END AGE ENCRYPTED FILE-----
     lastmodified: "2021-11-25T08:11:58Z"
     mac: ENC[AES256_GCM,data:pO5Bw5YsKmOcIGLpYRX8aiqodotiRZcXKqHhYsfLnIFjvAQmJC61MH12SpOAkCHN7Iaoi0NxFZKKFNIHf/7SJhRnZCXg0NmsoWJ1ZaZCYGbrtyoXFQolM5UXljghOKN0fSqKVrsHH4uCn0wDCmDz7cjILZFLOifceEJW0FjQjTs=,iv:FbB+4wAUiNYOhdIGQvNYDP4YJd06F7BuBJhD7lv/LNI=,tag:u+9342zLUrdgJ0ZkoYiSLg==,type:str]

@@ -7,7 +7,7 @@ DAGGER_RELEASES := https://github.com/dagger/dagger/releases
 DAGGER_VERSION := 0.1.0-alpha.30
 DAGGER_DIR := $(LOCAL_BIN)/dagger_v$(DAGGER_VERSION)_$(platform)_amd64
 DAGGER_URL := $(DAGGER_RELEASES)/download/v$(DAGGER_VERSION)/$(notdir $(DAGGER_DIR)).tar.gz
-DAGGER := $(DAGGER_DIR)/dagger
+DAGGER ?= $(DAGGER_DIR)/dagger
 $(DAGGER): | $(GH) $(CURL) $(LOCAL_BIN)
 	@printf "$(RED)$(BOLD)curl$(RESET)$(RED) will fail while $(BOLD)$(DAGGER_RELEASES)$(RESET)$(RED) is a private repository$(RESET)\n"
 	@printf "$(GREY)$(CURL) --progress-bar --fail --location --output $(DAGGER_DIR).tar.gz $(DAGGER_URL)$(RESET)\n"
@@ -38,10 +38,13 @@ DAGGER_CTX = cd $(BASE_DIR) && time $(DAGGER)
 ifneq (,$(DEBUG))
   DAGGER_CTX += --log-format plain
 endif
+ifneq (,$(NOCACHE))
+  DAGGER_CTX += --no-cache
+endif
 DAGGER_HOME := $(BASE_DIR)/.dagger
 DAGGER_ENV := $(DAGGER_HOME)/env
-OTEL_EXPORTER_JAEGER_ENDPOINT := http://$(shell awk -F'[/:]' '{ print $$4 }' <<< $(DOCKER_HOST)):14268/api/traces
-export OTEL_EXPORTER_JAEGER_ENDPOINT
+# OTEL_EXPORTER_JAEGER_ENDPOINT := http://$(shell awk -F'[/:]' '{ print $$4 }' <<< $(DOCKER_HOST)):14268/api/traces
+# export OTEL_EXPORTER_JAEGER_ENDPOINT
 
 $(DAGGER_HOME): | $(DAGGER)
 	@printf "$(BOLD)TODO$(RESET) $(CYAN)Make $(BOLD)dagger init$(RESET)$(CYAN) command idempotent$(RESET)\n"
@@ -65,7 +68,7 @@ dagger-ci: $(DAGGER_ENV)/ci
 	@printf "$(BOLD)TODO$(RESET) $(CYAN)Document multiple $(BOLD)--exclude$(RESET)$(CYAN) statements$(RESET)\n"
 	$(DAGGER_CTX) input dir app . $(shell $(_convert_dockerignore_to_excludes)) --exclude deps --environment ci
 	$(DAGGER_CTX) input text prod_dockerfile --file docker/Dockerfile.production --environment ci
-	$(DAGGER_CTX) input text docker_host $(DOCKER_HOST) --environment ci
+	$(DAGGER_CTX) input socket docker_socket "/var/run/docker.sock" --environment ci
 	@printf "$(BOLD)TODO$(RESET) $(CYAN)Remove $(BOLD)JAEGER_TRACE$(RESET)$(CYAN) from docs, it no longer works multiple$(RESET)\n"
 	$(DAGGER_CTX) up --log-level debug --environment ci
 
