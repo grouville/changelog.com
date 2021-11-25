@@ -180,17 +180,17 @@ prod_image: {
 			// Rather than running mix, yarn commands etc. it should consume the result of those steps
 			context:    prod_assets
 			dockerfile: prod_dockerfile
-			platforms: ["linux/amd64"]
-			buildArg: {
-				// TODO: Get from input
-				"APP_VERSION": "21.11.25+4f925cc"
-				// TODO: Get from input
-				"GIT_SHA": "4f925cce08433b9a779196590d0064b665b7f14a"
-				// TODO: Get from input
-				"GIT_AUTHOR": "gerhard"
-				// TODO: Get from input
-				"BUILD_URL": "https://circleci.com/gh/thechangelog/changelog.com/4678"
-			}
+			// platforms: ["linux/amd64"]
+			// buildArg: {
+			// 	// TODO: Get from input
+			// 	"APP_VERSION": "21.11.25+4f925cc"
+			// 	// TODO: Get from input
+			// 	"GIT_SHA": "4f925cce08433b9a779196590d0064b665b7f14a"
+			// 	// TODO: Get from input
+			// 	"GIT_AUTHOR": "gerhard"
+			// 	// TODO: Get from input
+			// 	"BUILD_URL": "https://circleci.com/gh/thechangelog/changelog.com/4678"
+			// }
 		},
 	]
 }
