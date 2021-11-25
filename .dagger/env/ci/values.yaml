@@ -67,6 +67,13 @@ inputs:
             ENV GIT_SHA=${GIT_SHA}
             ENV GIT_AUTHOR=${GIT_AUTHOR}
 
+            ARG BUILD_URL
+            ENV BUILD_URL=${BUILD_URL}
+            # Used by various tooling to report the identity & origin of this build
+            RUN echo "$GIT_SHA" > priv/static/version.txt \
+                ; echo "$GIT_AUTHOR" > COMMIT_USER \
+                ; echo "$BUILD_URL" > priv/static/build.txt
+
             EXPOSE 4000
 
             CMD make on-app-start; mix do ecto.create, ecto.migrate, phx.server
@@ -85,8 +92,8 @@ sops:
             SnF2bUoyV2kzMHVFMW1QSXg1MkxQNXcKK8gEBqG3EE4cquSUoQpC9OcFdUl/aJn3
             a3OhLCZLkB9/8CEd5IQ5QtUvIBK3fQe+3/zNkTNRLvay3OmWwKB8cA==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2021-11-23T08:54:47Z"
-    mac: ENC[AES256_GCM,data:duo4IVvw4RaGec58sdXW9D942zgQIzggCfog06w8uiCrmgp40fe/dxP+G6T9147MBBXSm3n190Aw2Lup7TuQAn3X/5Cih6X9WDe/mz1nz+R3V/HvsMeRF53f6zAyZzT7H9GwQd3SU+Qwx2vdOnzgvueupKWjVKC1dW6TBWXmUXM=,iv:BYshci/ZnFc7VJEgzOFoRebinSWwNAk4KeDOa0gregE=,tag:C6GX91tgzCbHqjPI1D6yZg==,type:str]
+    lastmodified: "2021-11-25T08:11:58Z"
+    mac: ENC[AES256_GCM,data:pO5Bw5YsKmOcIGLpYRX8aiqodotiRZcXKqHhYsfLnIFjvAQmJC61MH12SpOAkCHN7Iaoi0NxFZKKFNIHf/7SJhRnZCXg0NmsoWJ1ZaZCYGbrtyoXFQolM5UXljghOKN0fSqKVrsHH4uCn0wDCmDz7cjILZFLOifceEJW0FjQjTs=,iv:FbB+4wAUiNYOhdIGQvNYDP4YJd06F7BuBJhD7lv/LNI=,tag:u+9342zLUrdgJ0ZkoYiSLg==,type:str]
     pgp: []
     encrypted_suffix: secret
     version: 3.7.1

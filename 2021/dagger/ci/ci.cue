@@ -167,33 +167,35 @@ test_prod_assets: os.#Container & {
 	dir: "/app"
 }
 
-// We should only run this step if test succeeds,
-// otherwise we would be building a prod artefact for code that fails tests
+// Build image eagerly, but only publish if test succeeds
 prod_image: {
 	#up: [
-		op.#Load & {
-			from: prod_assets
-		},
 		op.#DockerBuild & {
 			// Why does this context re-run previous steps?
 			// Rather than running mix, yarn commands etc. it should consume the result of those steps
 			context:    prod_assets
 			dockerfile: prod_dockerfile
+			platforms: ["linux/amd64"]
+			buildArg: {
+				// TODO: Get from input
+				"APP_VERSION": "21.11.25+4f925cc"
+				// TODO: Get from input
+				"GIT_SHA": "4f925cce08433b9a779196590d0064b665b7f14a"
+				// TODO: Get from input
+				"GIT_AUTHOR": "gerhard"
+				// TODO: Get from input
+				"BUILD_URL": "https://circleci.com/gh/thechangelog/changelog.com/4678"
+			}
 		},
 	]
 }
 
 publish: docker.#Push & {
 	auth: {
+		// Only push the image if the test succeeds:
 		username: test.env.dockerhub_username
 		secret:   dockerhub_password
 	}
 	source: prod_image
 	target: "thechangelog/changelog.com:dagger"
 }
-
-// Publish prod_image to container registry
-// remoteImage: docker.#Push & {
-//  target: "\(registry):\(tag)"
-//  source: image
-// }

@@ -19,6 +19,13 @@ ENV APP_VERSION=${APP_VERSION}
 ENV GIT_SHA=${GIT_SHA}
 ENV GIT_AUTHOR=${GIT_AUTHOR}
 
+ARG BUILD_URL
+ENV BUILD_URL=${BUILD_URL}
+# Used by various tooling to report the identity & origin of this build
+RUN echo "$GIT_SHA" > priv/static/version.txt \
+    ; echo "$GIT_AUTHOR" > COMMIT_USER \
+    ; echo "$BUILD_URL" > priv/static/build.txt
+
 EXPOSE 4000
 
 CMD make on-app-start; mix do ecto.create, ecto.migrate, phx.server
